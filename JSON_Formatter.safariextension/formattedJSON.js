@@ -10,11 +10,13 @@
 			if( window !== window.top ) {
 				return;
 			}
+			var oSelf = window.safari.self;
 
 			// receive settings from proxy.html
-			safari.self.addEventListener( "message", function( oMessageEvent ) {
+			oSelf.addEventListener( "message", function( oMessageEvent ) {
 				if( oMessageEvent.name === "setData" ) {
 					var data = oMessageEvent.message;
+					var obj;
 					settings = data.settings;
 
 					// attempt to parse the body as JSON
@@ -23,7 +25,7 @@
 						if ( settings.unescape_unicode ) {
 							sJSON = JSON.stringify( JSON.parse( sJSON ) );
 						}
-						var obj = JSON.parse( sJSON
+						obj = JSON.parse( sJSON
 							.split( "\\" ).join( "\\\\" ) // double-up on escape sequences
 							.split( '\\\"' ).join( "\\\\\"" ) // at this point quotes have been unescaped.  re-escape them.
 						);
@@ -41,7 +43,7 @@
 			}, false );
 
 			// ask proxy.html for settings
-			safari.self.tab.dispatchMessage( "getData" );
+			oSelf.tab.dispatchMessage( "getData" );
 		},
 
 		/**
@@ -191,7 +193,7 @@
 			elBody.innerHTML = "";
 			this._append( elBody, [
 				this._html( '<div id="before"></div>' ),
-				this._html( '<div id="after"></div>' ),
+				this._html( '<div id="after"></div>' )
 			] );
 			document.getElementById( "before" ).innerText = json;
 		},

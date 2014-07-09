@@ -3,19 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>Author</key>
-	<string>drfisher</string>
+	<string>Pavel Rybin</string>
 	<key>Builder Version</key>
 	<string>9537.77.4</string>
 	<key>CFBundleDisplayName</key>
 	<string>JSON Formatter</string>
 	<key>CFBundleIdentifier</key>
-	<string>ch.flet.safari.jsonformatter</string>
+	<string>com.github.drfisher.jsonformatter</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>6</string>
+	<string>1</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -48,6 +48,6 @@
 	<key>Update Manifest URL</key>
 	<string>http://github.com/drfisher/safari-json-formatter/raw/latest/Update.plist</string>
 	<key>Website</key>
-	<string>http://github.com/drfisher/safari-json-formatter</string>
+	<string>https://github.com/drfisher/safari-json-formatter</string>
 </dict>
 </plist>

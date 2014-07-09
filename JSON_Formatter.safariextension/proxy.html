@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script type="text/javascript">
+  <script>
     safari.application.addEventListener( "message", function( e ) {
       if( e.name === "getData" ) {
         e.target.page.dispatchMessage( "setData", {
@@ -18,7 +18,7 @@
     }, false );
   </script>
 
-  <style type="text/css">
+  <style>
     /* reset */
     dl, dt, dd, ol, li {
       list-style-type: none;

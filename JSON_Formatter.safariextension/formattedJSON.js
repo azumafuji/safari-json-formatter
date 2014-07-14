@@ -70,27 +70,30 @@
 		 *  _html( "<div/>", "<div/>" ) => [<div/>, <div/>]
 		 */
 		_html: (function () {
-			var oCache = {};
+			var oElemsCache = {};
 
-			return function() {
+			return function(/* str, ... */) {
 				var nodes = [];
 				var fGetArray = Array.prototype.slice;
-				var elTemp, currentSource, aCurrentNodes;
+				var sSource, aNewElems, elTemp;
 
-				for( var i = 0, ii = arguments.length; i < ii; i++ ) {
-					currentSource = arguments[i];
-					if( this._typeof(currentSource) == "string" ) {
-						if (currentSource in oCache) {
-							aCurrentNodes = oCache[currentSource];
+				for (var i = 0, ii = arguments.length; i < ii; i++) {
+					sSource = arguments[i];
+
+					if (this._typeof(sSource) == "string") {
+						if (sSource in oElemsCache) {
+							aNewElems = [oElemsCache[sSource].cloneNode(true)];
 						} else {
-							elTemp = document.createElement( "div" );
-							elTemp.innerHTML = currentSource;
-							aCurrentNodes = fGetArray.call( elTemp.childNodes );
-							oCache[currentSource] = aCurrentNodes;
+							elTemp = document.createElement("div");
+							elTemp.innerHTML = sSource;
+							aNewElems = fGetArray.call(elTemp.childNodes);
+							if (aNewElems.length == 1) {
+								oElemsCache[sSource] = aNewElems[0].cloneNode(true);
+							}
 						}
-						nodes = nodes.concat(aCurrentNodes);
+						nodes = nodes.concat(aNewElems);
 					} else {
-						nodes = nodes.concat(currentSource);
+						nodes = nodes.concat(sSource);
 					}
 				}
 				return nodes.length == 1 ? nodes[0] : nodes;
@@ -260,15 +263,16 @@
 		 * render a javascript string as JSON
 		 */
 		renderString: function( obj ) {
-			var collapsible = obj.length > parseInt( settings.long_string_length, 10 ),
-					collapsed = collapsible && settings.fold_strings,
-					class_names = ["string"];
+			var collapsible = obj.length > parseInt( settings.long_string_length, 10 );
+			var collapsed = collapsible && settings.fold_strings;
+			var class_names = ["string"];
+			var elResult;
 
 			if( collapsible ) { class_names.push( "collapsible" ); }
 			if( collapsed ) { class_names.push( "closed" ); }
 
-			return this._append(
-				this._html( '<div class="' + class_names.join( " " ) + '"/>' ),
+			elResult = this._append(
+				this._html('<div/>'),
 					this._html(
 						collapsible ? '<span class="disclosure"></span>' : '',
 						'<span class="decorator">"</span>',
@@ -277,6 +281,8 @@
 						'<span class="separator">,</span>'
 					)
 				);
+			elResult.className = class_names.join(' ');
+			return elResult;
 		},
 
 		/**

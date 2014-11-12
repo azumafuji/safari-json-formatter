@@ -1,22 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script>
-    safari.application.addEventListener( "message", function( e ) {
-      if( e.name === "getData" ) {
-        e.target.page.dispatchMessage( "setData", {
-          css: document.head.getElementsByTagName( "style" )[0].textContent,
-          toolbar: document.getElementById( "toolbar" ).outerHTML,
-          settings: {
-            fold_strings: safari.extension.settings.getItem( "fold_strings" ),
-            long_string_length: safari.extension.settings.getItem( "long_string_length" ),
-            unescape_unicode: safari.extension.settings.getItem( "unescape_unicode" ),
-            sort_keys: safari.extension.settings.getItem( "sort_keys" )
-          }
-        } );
-      }
-    }, false );
-  </script>
+  <script src="proxy.js"></script>
 
   <style>
     /* reset */
@@ -107,7 +92,7 @@
       position: relative;
     }
     .disclosure {
-       -webkit-transform: scale(0.65, 1);
+      -webkit-transform: scale(0.65, 1);
 
       border: 0.65em solid transparent;
       border-top-color: #000;
@@ -148,8 +133,12 @@
   </style>
 </head>
 <body>
-  <ul id="toolbar">
-    <li>Toggle Formatting</li>
-  </ul>
+
+<script type="text/json-parser-template" id="toolbar">
+	<ul class="toolbar">
+		<li class="toolbar__item">Toggle Formatting</li>
+	</ul>
+</script>
+
 </body>
 </html>

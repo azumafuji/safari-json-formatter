@@ -1,5 +1,7 @@
-( function() {
+(function(window) {
 	var settings = {};
+	var bodyElement = window.document.body;
+
 	var formatJSON = {
 		/**
 		 * attempt to reformat the current document as JSON
@@ -7,25 +9,25 @@
 		 */
 		init: function() {
 			// abort if framed (issue #7)
-			if( window !== window.top ) {
+			if (window !== window.top) {
 				return;
 			}
 			var oSelf = window.safari.self;
 
 			// receive settings from proxy.html
-			oSelf.addEventListener( "message", function( oMessageEvent ) {
-				if( oMessageEvent.name === "setData" ) {
-					var data = oMessageEvent.message;
-					var obj;
+			oSelf.addEventListener("message", function(messageEvent) {
+				if (messageEvent.name === "setData") {
+					var data = messageEvent.message;
+					var jsonObject;
 					settings = data.settings;
 
 					// attempt to parse the body as JSON
 					try {
-						var sJSON = document.body.textContent;
-						if ( settings.unescape_unicode ) {
-							sJSON = JSON.stringify( JSON.parse( sJSON ) );
+						var sJSON = bodyElement.textContent;
+						if (settings.unescape_unicode) {
+							sJSON = JSON.stringify(JSON.parse(sJSON));
 						}
-						obj = JSON.parse( sJSON
+						jsonObject = JSON.parse(sJSON
 							.split( "\\" ).join( "\\\\" ) // double-up on escape sequences
 							.split( '\\\"' ).join( "\\\\\"" ) // at this point quotes have been unescaped.  re-escape them.
 						);
@@ -35,15 +37,15 @@
 					}
 
 					formatJSON.preparePage();
-					formatJSON.addStyle( data.css );
-					formatJSON.addToolbar( data.toolbar );
-					formatJSON.renderRoot( obj );
-					formatJSON.handleEvents();
+					formatJSON.addStyle(data.css);
+					formatJSON.addToolbar(data.toolbar.trim());
+					formatJSON.renderRoot(jsonObject);
+					formatJSON.attachListeners();
 				}
 			}, false );
 
 			// ask proxy.html for settings
-			oSelf.tab.dispatchMessage( "getData" );
+			oSelf.tab.dispatchMessage("getData");
 		},
 
 		/**
@@ -146,13 +148,58 @@
 		},
 
 		/**
+		 * delegating events
+		 */
+		_handleEvent: (function () {
+			var _handlers = {};
+
+			/**
+			 * Universal events handler
+			 * @param {Event} eventObject
+			 * @private
+			 */
+			var _eventsListener = function (eventObject) {
+				var eventType = eventObject.type;
+				var eventHandlers;
+
+				if (eventType in _handlers) {
+					eventHandlers = _handlers[eventType];
+
+					for (var className in eventHandlers) {
+						if (eventHandlers.hasOwnProperty(className) && eventObject.target.classList.contains(className)) {
+							eventHandlers[className].forEach(function (callback) {
+								callback.call(this, eventObject);
+							}, this);
+						}
+					}
+				}
+			};
+
+			return function (eventType, targetCssClass, callback) {
+				var eventHandlers = _handlers[eventType];
+				var handlersList;
+
+				if (!eventHandlers) {
+					_handlers[eventType] = eventHandlers = {};
+					window.document.addEventListener(eventType, _eventsListener);
+				}
+
+				handlersList = eventHandlers[targetCssClass];
+				if (!handlersList) {
+					eventHandlers[targetCssClass] = handlersList = [];
+				}
+				handlersList.push(callback);
+			};
+		})(),
+
+		/**
 		 * inject css rules into the document
 		 *  addStyle( "a { color: blue; }" )
 		 */
 		addStyle: function( css ) {
 			var style = document.createElement('style');
 			style.innerHTML = css;
-			document.body.appendChild( style );
+			bodyElement.appendChild( style );
 		},
 
 		/**
@@ -160,29 +207,23 @@
 		 */
 		addToolbar: function( html ) {
 			var toolbar = this._html( html );
-			document.body.insertBefore( toolbar, document.body.firstChild );
+			bodyElement.insertBefore( toolbar, bodyElement.firstChild );
 
-			var toggle = document.getElementById( "toolbar" ).getElementsByTagName( "li" )[0];
+			var toggle = toolbar.getElementsByTagName("li")[0];
 
-		toggle.addEventListener( "click", function() {
-				formatJSON._toggleClass( document.body, "before" );
-			} );
+			toggle.addEventListener("click", function() {
+				formatJSON._toggleClass( bodyElement, "before" );
+			});
 		},
 
 		/**
 		 * handle javascript events
 		 */
-		handleEvents: function() {
-			// TODO: delegate events
-			var disclosure_triangles = document.querySelectorAll( ".disclosure" ),
-
-			handler = function( e ) {
-				formatJSON._toggleClass( e.target.parentElement, "closed" );
-			};
-
-			Array.prototype.forEach.call( disclosure_triangles, function( el ) {
-				el.addEventListener( "click", handler );
-			} );
+		attachListeners: function() {
+			// disclosure triangles
+			this._handleEvent('click', 'disclosure', function(oEvent) {
+				formatJSON._toggleClass(oEvent.target.parentElement, 'closed');
+			});
 		},
 
 		/**
@@ -190,7 +231,7 @@
 		 * add a wrapper for the formatted JSON.
 		 */
 		preparePage: function() {
-			var elBody = document.body;
+			var elBody = bodyElement;
 			var json = elBody.textContent;
 
 			elBody.innerHTML = "";
@@ -313,7 +354,7 @@
 			}
 		}
 	};
-
+	
 	// initialize!
 	formatJSON.init();
-}() );
+}(window));

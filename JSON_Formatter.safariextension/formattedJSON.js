@@ -103,35 +103,6 @@
 		})(),
 
 		/**
-		 * toggle the presense of a css class name
-		 *  _toggleClass( <a class="foo"/>, "bar" ) => <a class="foo bar"/>
-		 *  _toggleClass( <a class="foo bar"/>, "bar" ) => <a class="foo"/>
-		 */
-		_toggleClass: (function () {
-			var fToggleClass;
-
-			if (!!document.documentElement.classList) {
-				fToggleClass = function (el, class_name) {
-					el.classList.toggle(class_name);
-				};
-
-			} else {
-				fToggleClass = function(el, class_name) {
-					var class_names = el.className.split( " " );
-					if( class_names.indexOf( class_name ) >= 0 ) {
-						class_names = class_names.filter( function( val ) {
-							return val.toLowerCase() !== class_name.toLowerCase();
-						} );
-					} else {
-						class_names.push( class_name );
-					}
-					el.className = class_names.join( " " );
-				};
-			}
-			return fToggleClass;
-		})(),
-
-		/**
 		 * a slightly more informative "typeof"
 		 *  _typeof( [] ) => "array"
 		 *  _typeof( 1 ) => "number"
@@ -193,6 +164,35 @@
 		})(),
 
 		/**
+		 * Getting elems collection to toggle
+		 */
+		_getElemsToToggle: (function () {
+			var elemsCache = {};
+			var counter = 1;
+			var counterAttr = 'data-children-list-id';
+			var childrenSel = '.toggle-all';
+			var fGetParent = function (element) {
+				return element.parentElement;
+			};
+
+			return function (parentElem) {
+				var cacheKey = parentElem.getAttribute(counterAttr);
+				var elemsCollection;
+
+				if (cacheKey && cacheKey in elemsCache) {
+					elemsCollection = elemsCache[cacheKey];
+
+				} else {
+					elemsCollection = Array.prototype.slice.call(parentElem.querySelectorAll(childrenSel), 0).map(fGetParent);
+					parentElem.setAttribute(counterAttr, counter);
+					elemsCache[counter] = elemsCollection;
+					counter++;
+				}
+				return elemsCollection;
+			};
+		})(),
+
+		/**
 		 * inject css rules into the document
 		 *  addStyle( "a { color: blue; }" )
 		 */
@@ -212,7 +212,7 @@
 			var toggle = toolbar.getElementsByTagName("li")[0];
 
 			toggle.addEventListener("click", function() {
-				formatJSON._toggleClass( bodyElement, "before" );
+				bodyElement.classList.toggle('before');
 			});
 		},
 
@@ -220,9 +220,21 @@
 		 * handle javascript events
 		 */
 		attachListeners: function() {
+
 			// disclosure triangles
-			this._handleEvent('click', 'disclosure', function(oEvent) {
-				formatJSON._toggleClass(oEvent.target.parentElement, 'closed');
+			this._handleEvent('click', 'disclosure', function (oEvent) {
+				oEvent.target.parentElement.classList.toggle('closed');
+			});
+
+			// toggle all children
+			this._handleEvent('click', 'toggle-all', function (oEvent) {
+				var elParent = oEvent.target.parentElement;
+				var classMethodName = elParent.classList.contains('closed') ? 'remove' : 'add';
+
+				formatJSON._getElemsToToggle(elParent).forEach(function (elemToToggle) {
+					elemToToggle.classList[classMethodName]('closed');
+				});
+
 			});
 		},
 
@@ -256,7 +268,7 @@
 			return this._append(
 				this._html( '<div class="array collapsible"/>' ),
 					this._html(
-						'<span class="disclosure"></span>',
+						'<span class="disclosure"></span><span class="toggle-all"></span>',
 						'<span class="decorator">[</span>',
 						list.childNodes.length ? list : '',
 						'<span class="decorator">]</span>', '<span class="separator">,</span>'
@@ -276,7 +288,7 @@
 				keys = keys.sort();
 			}
 
-			for( var i = 0, ii = keys.length; i < ii; i++ ) {
+			for (var i = 0, ii = keys.length; i < ii; i++) {
 				this._append( list, this._append( this._html( "<dt/>" ), this._html( '<span class="decorator">"</span>', document.createTextNode( keys[i] ), '<span class="decorator">"</span>', '<span class="delimiter">:</span>' ) ) );
 				this._append( list, this._append( this._html( "<dd/>" ), this.render( obj[keys[i]] ) ) );
 			}
@@ -284,7 +296,7 @@
 			return this._append(
 				this._html( '<div class="object collapsible"/>' ),
 					this._html(
-						'<span class="disclosure"></span>',
+						'<span class="disclosure"></span><span class="toggle-all"></span>',
 						'<span class="decorator">{</span>',
 						list.childNodes.length ? list : '',
 						'<span class="decorator">}</span>',
@@ -309,8 +321,12 @@
 			var class_names = ["string"];
 			var elResult;
 
-			if( collapsible ) { class_names.push( "collapsible" ); }
-			if( collapsed ) { class_names.push( "closed" ); }
+			if (collapsible) {
+				class_names.push( "collapsible" );
+			}
+			if (collapsed) {
+				class_names.push( "closed" );
+			}
 
 			elResult = this._append(
 				this._html('<div/>'),

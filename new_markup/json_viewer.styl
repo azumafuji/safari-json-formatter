@@ -1,0 +1,32 @@
+/* settings */
+COLOR_BASE = #222
+COLOR_STRING = #393
+COLOR_PUNCTUATION = #7f7f7f
+
+/* reset */
+body
+	font-family 'Courier new', monospace
+	font-size 14px
+	line-height 1.3em
+	margin 0
+	padding 0
+	color COLOR_BASE
+
+.json
+	padding 1em
+
+.node
+	left 1.5em
+	marign-left 1em
+	position relative
+
+	&__key
+		font-weight bold
+
+	&__value
+		color COLOR_STRING
+
+	&__decorator
+	&__delimiter
+	&__separator
+		color COLOR_PUNCTUATION

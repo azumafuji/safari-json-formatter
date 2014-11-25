@@ -18,6 +18,7 @@ commit][3] makes a good example.
 
 ### 1.2
 * Performance improvements
+* Added "hide/show all" buttons
 
 ### 1.1
 * Added folding of arrays, objects and long strings

@@ -170,7 +170,7 @@
 			var elemsCache = {};
 			var counter = 1;
 			var counterAttr = 'data-children-list-id';
-			var childrenSel = '.toggle-all';
+			var childrenSel = '.icon_disclosure';
 			var fGetParent = function (element) {
 				return element.parentElement;
 			};
@@ -222,19 +222,18 @@
 		attachListeners: function() {
 
 			// disclosure triangles
-			this._handleEvent('click', 'disclosure', function (oEvent) {
-				oEvent.target.parentElement.classList.toggle('closed');
-			});
-
-			// toggle all children
-			this._handleEvent('click', 'toggle-all', function (oEvent) {
+			this._handleEvent('click', 'icon_disclosure', function (oEvent) {
 				var elParent = oEvent.target.parentElement;
-				var classMethodName = elParent.classList.contains('closed') ? 'remove' : 'add';
 
-				formatJSON._getElemsToToggle(elParent).forEach(function (elemToToggle) {
-					elemToToggle.classList[classMethodName]('closed');
-				});
+				if (oEvent.metaKey) {
+					var classMethodName = elParent.classList.contains('closed') ? 'remove' : 'add';
+					formatJSON._getElemsToToggle(elParent).forEach(function (elemToToggle) {
+						elemToToggle.classList[classMethodName]('closed');
+					});
 
+				} else {
+					elParent.classList.toggle('closed');
+				}
 			});
 		},
 
@@ -268,7 +267,7 @@
 			return this._append(
 				this._html( '<div class="array collapsible"/>' ),
 					this._html(
-						'<span class="disclosure"></span><span class="toggle-all"></span>',
+						'<span class="icon icon_disclosure"></span>',
 						'<span class="decorator">[</span>',
 						list.childNodes.length ? list : '',
 						'<span class="decorator">]</span>', '<span class="separator">,</span>'
@@ -296,7 +295,7 @@
 			return this._append(
 				this._html( '<div class="object collapsible"/>' ),
 					this._html(
-						'<span class="disclosure"></span><span class="toggle-all"></span>',
+						'<span class="icon icon_disclosure"></span>',
 						'<span class="decorator">{</span>',
 						list.childNodes.length ? list : '',
 						'<span class="decorator">}</span>',
@@ -331,7 +330,7 @@
 			elResult = this._append(
 				this._html('<div/>'),
 					this._html(
-						collapsible ? '<span class="disclosure"></span>' : '',
+						collapsible ? '<span class="icon icon_disclosure"></span>' : '',
 						'<span class="decorator">"</span>',
 						this._append( this._html( '<span class="value"/>' ), document.createTextNode( obj ) ),
 						'<span class="decorator">"</span>',

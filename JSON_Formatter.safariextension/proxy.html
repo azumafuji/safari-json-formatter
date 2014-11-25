@@ -15,19 +15,19 @@
       font-family: monospace;
       margin: 0;
       padding: 12px;
-      color: #000;
+      color: #222;
     }
 
     #before { display: none; }
     body.before #before { display: block; }
     body.before #after { display: none; }
-    body.before #toolbar { position: static; }
+    body.before .toolbar { position: static; }
 
     #after {
       padding-left: 1em;
     }
 
-    #toolbar {
+    .toolbar {
       border: 1px solid #8c8c8c;
       border-radius: 5px;
       float: right;
@@ -42,7 +42,7 @@
       -webkit-user-select: none;
       z-index: 9999;
     }
-    #toolbar li {
+    .toolbar__item {
       background: -webkit-gradient( linear, 0 0, 0 100%, from(#f4f4f4), to(#bebebe) );
       color: #3f3f3f;
       cursor: pointer;
@@ -54,7 +54,7 @@
       text-decoration: none;
       text-shadow: 0 1px rgba(255, 255, 255, 0.8);
     }
-    #toolbar li:active {
+    .toolbar__item:active {
       background: -webkit-gradient( linear, 0 0, 0 100%, from(#bebebe), to(#f4f4f4) );
     }
 
@@ -86,52 +86,61 @@
       padding-left: 1.5em;
       white-space: pre-wrap;
     }
-
-    /* disclosure triangles */
     .collapsible {
-      position: relative;
+	    position: relative;
     }
-    .disclosure {
-      -webkit-transform: scale(0.65, 1);
 
-      border: 0.65em solid transparent;
-      border-top-color: #000;
-      border-bottom-width: 0;
-      cursor: pointer;
-      height: 0;
-      top: 0.3em;
-      left: -1.2em;
-      position: absolute;
-      width: 0;
-    }
-    .collapsible.closed > .disclosure {
-      -webkit-transform: scale(1, 0.65);
+    /* Buttons */
 
-      border: 0.65em solid transparent;
-      border-left-color: #000;
-      border-right-width: 0;
-      top: 0;
-      left: -0.95em;
+    @font-face {
+	    font-family: 'fontello';
+	    src: url('___extensionBaseUrl___fontello.ttf') format('truetype');
+	    font-weight: normal;
+	    font-style: normal;
     }
-    .collapsible.closed > .value { display: none; }
-    .collapsible.closed > .disclosure + .decorator::after {
+
+    .icon {
+	    cursor: pointer;
+	    left: 0;
+	    position: absolute;
+	    top: 0.2em;
+    }
+	    .icon:before {
+		    color: #aaa;
+		    display: inline-block;
+		    font-size: .75em;
+		    font-family: "fontello";
+		    font-style: normal;
+		    font-weight: normal;
+		    font-variant: normal;
+		    margin-right: .2em;
+		    margin-left: .2em;
+		    text-align: center;
+		    text-transform: none;
+		    line-height: 1em;
+		    width: 1em;
+	    }
+        .icon:hover:before {
+	        color: #3f3f3f;
+        }
+
+	    /* toggle a block */
+	    .icon_disclosure {
+		    left: -1.2em;
+	    }
+	      .icon_disclosure:before {
+		      -webkit-transform: rotate(90deg);
+		      content: '\e800'
+	      }
+
+    .closed > .icon_disclosure:before {
+	    -webkit-transform: rotate(0deg);
+    }
+    .closed > .value { display: none; }
+    .closed > .icon_disclosure + .decorator::after {
       color: #339;
       content: "...";
     }
-
-    /* "Toggle all" buttons */
-    .toggle-all {
-	    height: 0;
-	    padding: 0;
-	    position: absolute;
-	    left: -2em;
-	    margin: 0;
-	    top: 0;
-	    width: 0;
-    }
-      .toggle-all:before {
-	      content: 'x';
-      }
 
     /* separation between labels and values */
     dt { margin-right: 0.5em; }
@@ -139,8 +148,7 @@
     /* dim the delimiters */
     .decorator,
     .delimiter,
-    .separator,
-    .disclosure {
+    .separator {
 	    color: #7f7f7f;
     }
 

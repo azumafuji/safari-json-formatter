@@ -1,0 +1,147 @@
+/* reset */
+dl, dt, dd, ol, li {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: monospace;
+	margin: 0;
+	padding: 12px;
+	color: #222;
+}
+
+#before { display: none; }
+body.before #before { display: block; }
+body.before #after { display: none; }
+body.before .toolbar { position: static; }
+
+#after {
+	padding-left: 1em;
+}
+
+.toolbar {
+	border: 1px solid #8c8c8c;
+	border-radius: 5px;
+	float: right;
+	font-family: "lucida grande", sans-serif;
+	overflow: hidden;
+	font-size: 0;
+	padding: 0;
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	margin: 0 0 6px 6px;
+	-webkit-user-select: none;
+	z-index: 9999;
+}
+.toolbar__item {
+	background: -webkit-gradient( linear, 0 0, 0 100%, from(#f4f4f4), to(#bebebe) );
+	color: #3f3f3f;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 21px;
+	padding: 0 7px 1px;
+	text-decoration: none;
+	text-shadow: 0 1px rgba(255, 255, 255, 0.8);
+}
+.toolbar__item:active {
+	background: -webkit-gradient( linear, 0 0, 0 100%, from(#bebebe), to(#f4f4f4) );
+}
+
+dl,
+ol {
+	padding: 0 0 0 1.5em;
+	margin: 0;
+}
+
+/* hide commas for last elements */
+#after > * > .separator,
+.value > *:last-child > * > .separator {
+	display: none;
+}
+
+/* labels */
+dt {
+	font-weight: bold;
+	float: left;
+}
+
+/* values */
+span.value { color: #339; }
+div.string .value,
+div.string .decorator {
+	color: #393;
+}
+div.string {
+	padding-left: 1.5em;
+	white-space: pre-wrap;
+}
+.collapsible {
+	position: relative;
+}
+
+/* Buttons */
+
+@font-face {
+	font-family: 'fontello';
+	src: url('___extensionBaseUrl___fontello.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.icon {
+	cursor: pointer;
+	left: 0;
+	position: absolute;
+	top: 0.2em;
+}
+.icon:before {
+	color: #aaa;
+	display: inline-block;
+	font-size: .75em;
+	font-family: "fontello";
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	margin-right: .2em;
+	margin-left: .2em;
+	text-align: center;
+	text-transform: none;
+	line-height: 1em;
+	width: 1em;
+}
+.icon:hover:before {
+	color: #3f3f3f;
+}
+
+/* toggle a block */
+.icon_disclosure {
+	left: -1.2em;
+}
+.icon_disclosure:before {
+	-webkit-transform: rotate(90deg);
+	content: '\e800'
+}
+
+.closed > .icon_disclosure:before {
+	-webkit-transform: rotate(0deg);
+}
+.closed > .value { display: none; }
+.closed > .icon_disclosure + .decorator::after {
+	color: #339;
+	content: "...";
+}
+
+/* separation between labels and values */
+dt { margin-right: 0.5em; }
+
+/* dim the delimiters */
+.decorator,
+.delimiter,
+.separator {
+	color: #7f7f7f;
+}

@@ -4,14 +4,19 @@
 (function (window) {
 	var safariNameSpace = window.safari;
 	var extensionSettings = safariNameSpace.extension.settings;
+	var baseURI = safariNameSpace.extension.baseURI;
+	var xmlHttp = new XMLHttpRequest();
 	var toolbarHTML, stylesText;
 
-	window.safari.application.addEventListener('message', function(messageEvent) {
+	// Load css syncronically
+	xmlHttp.open('GET', 'formatted_json.css', false);
+	xmlHttp.send(null);
+	stylesText = xmlHttp.responseText.replace(/___extensionBaseUrl___/g, baseURI);
+
+	safariNameSpace.application.addEventListener('message', function(messageEvent) {
 		if (messageEvent.name === 'getData' && messageEvent.target.page) {
 			if (!toolbarHTML) {
 				toolbarHTML = document.getElementById('toolbar').innerHTML;
-				stylesText = document.head.getElementsByTagName('style')[0]
-					.textContent.replace(/___extensionBaseUrl___/g, safariNameSpace.extension.baseURI);
 			}
 			messageEvent.target.page.dispatchMessage('setData', {
 				css: stylesText,

@@ -9,7 +9,7 @@
 	var toolbarHTML, stylesText;
 
 	// Load css syncronically
-	xmlHttp.open('GET', 'formatted_json.css', false);
+	xmlHttp.open('GET', 'json_viewer.css', false);
 	xmlHttp.send(null);
 	stylesText = xmlHttp.responseText.replace(/___extensionBaseUrl___/g, baseURI);
 

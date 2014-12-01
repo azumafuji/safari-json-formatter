@@ -36,11 +36,13 @@
 						return;
 					}
 
-					formatJSON.preparePage();
-					formatJSON.addStyle(data.css);
-					formatJSON.addToolbar(data.toolbar.trim());
-					formatJSON.renderRoot(jsonObject);
-					formatJSON.attachListeners();
+					formatJSON._elems = {};
+					formatJSON
+						.preparePage()
+						.addStyle(data.css)
+						.addToolbar(data.toolbar.trim())
+						.renderRoot(jsonObject)
+						.attachListeners();
 				}
 			}, false );
 
@@ -194,30 +196,35 @@
 
 		/**
 		 * inject css rules into the document
-		 *  addStyle( "a { color: blue; }" )
+		 * addStyle( "a { color: blue; }" )
+		 * @returns {formatJSON}
 		 */
 		addStyle: function( css ) {
 			var style = document.createElement('style');
 			style.innerHTML = css;
 			bodyElement.appendChild( style );
+			return this;
 		},
 
 		/**
 		 * add the toolbar
+		 * @returns {formatJSON}
 		 */
 		addToolbar: function( html ) {
 			var toolbar = this._html( html );
 			bodyElement.insertBefore( toolbar, bodyElement.firstChild );
 
-			var toggle = toolbar.getElementsByTagName("li")[0];
+			var toggle = toolbar.querySelector('.js-toggle-view');
 
 			toggle.addEventListener("click", function() {
 				bodyElement.classList.toggle('before');
 			});
+			return this;
 		},
 
 		/**
 		 * handle javascript events
+		 * @returns {formatJSON}
 		 */
 		attachListeners: function() {
 
@@ -235,22 +242,28 @@
 					elParent.classList.toggle('closed');
 				}
 			});
+			return this;
 		},
 
 		/**
 		 * hide the unformatted JSON text.
 		 * add a wrapper for the formatted JSON.
+		 * @returns {formatJSON}
 		 */
 		preparePage: function() {
 			var elBody = bodyElement;
-			var json = elBody.textContent;
+			var sourceText = elBody.textContent;
+			var sourceCont = this._html('<section />');
+			var jsonCont = sourceCont.cloneNode();
 
+			sourceCont.innerText = sourceText;
+			sourceCont.classList.add('source');
+			jsonCont.classList.add('json');
+			this._elems.source = sourceCont;
+			this._elems.json = jsonCont;
 			elBody.innerHTML = "";
-			this._append( elBody, [
-				this._html( '<div id="before"></div>' ),
-				this._html( '<div id="after"></div>' )
-			] );
-			document.getElementById( "before" ).innerText = json;
+			this._append(elBody, [sourceCont, jsonCont]);
+			return this;
 		},
 
 		/**
@@ -306,9 +319,11 @@
 
 		/**
 		 * render a javascript object as JSON
+		 * @returns {formatJSON}
 		 */
-		renderRoot: function( obj ) {
-			this._append( document.getElementById( "after" ), this.render( obj ) );
+		renderRoot: function(obj) {
+			this._append(this._elems.json, this.render(obj));
+			return this;
 		},
 
 		/**
@@ -354,18 +369,20 @@
 		 * render a javascript variable as HTML
 		 *  render( foo ) => Element
 		 */
-		render: function( obj ) {
-			var t = this._typeof( obj );
-			switch( t ) {
-				case "array":  return this.renderArray( obj );
-				case "object": return this.renderObject( obj );
-				case "string": return this.renderString( obj );
+		render: function(obj) {
+			var jsonType = this._typeof(obj);
+			var simpleTypeCont;
+
+			switch(jsonType) {
+				case "array": return this.renderArray(obj);
+				case "object": return this.renderObject(obj);
+				case "string": return this.renderString(obj);
 				case "boolean":
 				case "null":
 				case "number":
-					var el = this.renderValue( obj );
-					el.className += " " + t;
-					return el;
+					simpleTypeCont = this.renderValue(obj);
+					simpleTypeCont.classList.add(jsonType);
+					return simpleTypeCont;
 			}
 		}
 	};

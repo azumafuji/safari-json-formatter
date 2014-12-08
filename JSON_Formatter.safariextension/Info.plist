@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>Pavel Rybin</string>
 	<key>Builder Version</key>
-	<string>10600.1.25.1</string>
+	<string>10600.2.3</string>
 	<key>CFBundleDisplayName</key>
 	<string>JSON Formatter</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.2</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.1</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -27,7 +27,7 @@
 		<dict>
 			<key>End</key>
 			<array>
-				<string>formattedJSON.js</string>
+				<string>json_viewer.js</string>
 			</array>
 		</dict>
 	</dict>

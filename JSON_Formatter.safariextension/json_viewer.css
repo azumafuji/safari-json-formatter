@@ -52,6 +52,9 @@ body.before .json {
 .node__value {
   color: #393;
 }
+.node__value_literal {
+  color: #339;
+}
 .node__decorator,
 .node__delimiter,
 .node__separator {

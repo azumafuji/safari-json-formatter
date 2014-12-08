@@ -17,8 +17,9 @@ commit][3] makes a good example.
 #### Version History
 
 ### 1.2
+* Code refactoring
 * Performance improvements
-* Added "hide/show all" buttons
+* Added "hide/show all" ability
 
 ### 1.1
 * Added folding of arrays, objects and long strings

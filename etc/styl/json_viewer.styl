@@ -1,6 +1,7 @@
 // settings
 COLOR_BASE = #222
-COLOR_STRING = #393
+COLOR_VALUE_TYPED = #339
+COLOR_VALUE_STRING = #393
 COLOR_PUNCTUATION = #7f7f7f
 
 // reset
@@ -59,7 +60,10 @@ body
 		font-weight bold
 
 	&__value
-		color COLOR_STRING
+		color COLOR_VALUE_STRING
+
+		&_literal
+			color COLOR_VALUE_TYPED
 
 	&__decorator
 	&__delimiter

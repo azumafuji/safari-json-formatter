@@ -19,7 +19,13 @@
 		quote: '<span class="node__decorator">"</span>',
 		colon: '<span class="node__delimiter">:</span>',
 		comma: '<span class="node__separator">,</span>',
-		bracket: '<span class="node__decorator" />'
+		bracket: '<span class="node__decorator" />',
+		toggle: '<span class="toggle" />'
+	};
+	var cssClasses = {
+		closed: 'closed',
+		collapsible: 'collapsible',
+		objectNode: 'node_object'
 	};
 	
 	/**
@@ -229,17 +235,18 @@
 	function attachListeners () {
 
 		// disclosure triangles
-		handleEvent('click', 'icon_disclosure', function (oEvent) {
+		handleEvent('click', 'toggle', function (oEvent) {
 			var elParent = oEvent.target.parentElement;
+			var closedClass = cssClasses.closed;
 
 			if (oEvent.metaKey) {
-				var classMethodName = elParent.classList.contains('closed') ? 'remove' : 'add';
+				var classMethodName = elParent.classList.contains(closedClass) ? 'remove' : 'add';
 				getElemsToToggle(elParent).forEach(function (elemToToggle) {
-					elemToToggle.classList[classMethodName]('closed');
+					elemToToggle.classList[classMethodName](closedClass);
 				});
 
 			} else {
-				elParent.classList.toggle('closed');
+				elParent.classList.toggle(closedClass);
 			}
 		});
 	}
@@ -271,20 +278,19 @@
 	function renderArray (arrayToRender) {
 		var aResult = [];
 		var commaTemplate = templates.comma;
-		var withoutComma = true;
+		var isLastElem = true;
 		var currentNode;
-
-		// TODO: collapsible
 
 		for (var i = arrayToRender.length - 1; i >= 0; i--) {
 			currentNode = render(arrayToRender[i]);
-			if (!withoutComma) {
+			if (!isLastElem) {
 				append(currentNode, html(commaTemplate));
 			} else {
-				withoutComma = false;
+				isLastElem = false;
 			}
 			aResult.unshift(currentNode);
 		}
+		aResult.push(html(templates.toggle));
 		return aResult;
 	}
 
@@ -297,10 +303,8 @@
 		var keys = Object.keys(objectToRender);
 		var aResult = [];
 		var commaTemplate = templates.comma;
-		var withoutComma = true;
+		var isLastElem = true;
 		var currentKey, currentNode;
-
-		// TODO: collapsible
 
 		if (settings.sort_keys) {
 			keys = keys.sort();
@@ -308,13 +312,14 @@
 		for (var i = keys.length - 1; i >= 0; i--) {
 			currentKey = keys[i];
 			currentNode = render(objectToRender[currentKey], currentKey);
-			if (!withoutComma) {
+			if (!isLastElem) {
 				append(currentNode, html(commaTemplate));
 			} else {
-				withoutComma = false;
+				isLastElem = false;
 			}
 			aResult.unshift(currentNode);
 		}
+		aResult.push(html(templates.toggle));
 		return aResult;
 	}
 
@@ -324,17 +329,19 @@
 	 * @returns {HTMLElement}
 	 */
 	function renderString (stringToRender) {
+		var stringCont = html(templates.string);
 		var stringElems = [text('"' + stringToRender + '"')];
-		// TODO: collapsible
-		//var collapsible = stringToRender.length > parseInt( settings.long_string_length, 10 );
-		//var collapsed = collapsible && settings.fold_strings;
-		//if (collapsible) {
-		//	class_names.push( "collapsible" );
-		//}
-		//if (collapsed) {
-		//	class_names.push( "closed" );
-		//}
-		return append(html(templates.string), stringElems);
+		var collapsible = stringToRender.length > parseInt( settings.long_string_length, 10 );
+		var collapsed = collapsible && settings.fold_strings;
+
+		if (collapsible) {
+			stringElems.push(html(templates.toggle));
+			stringCont.classList.add(cssClasses.collapsible);
+		}
+		if (collapsed) {
+			stringCont.classList.add(cssClasses.closed);
+		}
+		return append(stringCont, stringElems);
 	}
 
 	/**
@@ -357,20 +364,25 @@
 	function render (value, key) {
 		var valueType = getTypeOf(value);
 		var node = html(templates.node);
+		var bracketTemplate = templates.bracket;
+		var objectClassName = cssClasses.objectNode;
 		var renderedValue, renderedKey;
 
 		if (valueType === 'array') {
+			node.classList.add(cssClasses.collapsible);
 			renderedValue = [].concat(
-				text('['),
+				append(html(bracketTemplate), text('[')),
 				renderArray(value),
-				text(']')
+				append(html(bracketTemplate), text(']'))
 			);
 
 		} else if (valueType === 'object') {
+			node.classList.add(objectClassName);
+			node.classList.add(cssClasses.collapsible);
 			renderedValue = [].concat(
-				text('{'),
+				append(html(bracketTemplate), text('{')),
 				renderObject(value),
-				text('}')
+				append(html(bracketTemplate), text('}'))
 			);
 
 		} else if (valueType === 'string') {

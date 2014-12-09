@@ -3,6 +3,8 @@ COLOR_BASE = #222
 COLOR_VALUE_TYPED = #339
 COLOR_VALUE_STRING = #393
 COLOR_PUNCTUATION = #7f7f7f
+COLOR_ICON = #aaa
+COLOR_ICON_HOVER = #3f3f3f
 
 // reset
 body
@@ -56,11 +58,16 @@ body
 	marign-left 1em
 	position relative
 
+	&_object
+		left 3em
+		text-indent -1.5em
+
 	&__key
 		font-weight bold
 
 	&__value
 		color COLOR_VALUE_STRING
+		word-break break-all
 
 		&_literal
 			color COLOR_VALUE_TYPED
@@ -69,3 +76,51 @@ body
 	&__delimiter
 	&__separator
 		color COLOR_PUNCTUATION
+	&__delimiter
+		margin-right .25em
+
+
+@font-face
+	font-family 'fontello'
+	src url('___extensionBaseUrl___fontello.ttf') format('truetype')
+	font-weight normal
+	font-style normal
+
+.toggle
+	cursor pointer
+	left -1.2em
+	position absolute
+	top .2em
+	z-index 1
+
+	&:before
+		color COLOR_ICON
+		content '\e800'
+		display inline-block
+		font-size 1em
+		font-family "fontello"
+		font-style normal
+		font-weight normal
+		font-variant normal
+		margin 0
+		padding 0
+		text-align center
+		text-transform none
+		line-height 1em
+		-webkit-transform rotate(90deg)
+		width 1em
+
+	&:hover:before
+		color COLOR_ICON_HOVER
+
+.closed
+	& .node
+		display none
+	& .node__decorator:after
+		content '...'
+
+.closed > .toggle
+	top .1em
+
+	&:before
+		-webkit-transform rotate(0deg)

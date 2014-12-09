@@ -46,11 +46,16 @@ body.before .json {
   marign-left: 1em;
   position: relative;
 }
+.node_object {
+  left: 3em;
+  text-indent: -1.5em;
+}
 .node__key {
   font-weight: bold;
 }
 .node__value {
   color: #393;
+  word-break: break-all;
 }
 .node__value_literal {
   color: #339;
@@ -59,4 +64,52 @@ body.before .json {
 .node__delimiter,
 .node__separator {
   color: #7f7f7f;
+}
+.node__delimiter {
+  margin-right: 0.25em;
+}
+@font-face {
+  font-family: 'fontello';
+  src: url("___extensionBaseUrl___fontello.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.toggle {
+  cursor: pointer;
+  left: -1.2em;
+  position: absolute;
+  top: 0.2em;
+  z-index: 1;
+}
+.toggle:before {
+  color: #aaa;
+  content: '\e800';
+  display: inline-block;
+  font-size: 1em;
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  text-transform: none;
+  line-height: 1em;
+  -webkit-transform: rotate(90deg);
+  width: 1em;
+}
+.toggle:hover:before {
+  color: #3f3f3f;
+}
+.closed .node {
+  display: none;
+}
+.closed .node__decorator:after {
+  content: '...';
+}
+.closed > .toggle {
+  top: 0.1em;
+}
+.closed > .toggle:before {
+  -webkit-transform: rotate(0deg);
 }

@@ -1,5 +1,5 @@
 // settings
-COLOR_BASE = #222
+COLOR_BASE = #3f3f3f
 COLOR_VALUE_TYPED = #339
 COLOR_VALUE_STRING = #393
 COLOR_PUNCTUATION = #7f7f7f
@@ -51,15 +51,14 @@ body
 
 // formatted json
 .json
-	padding 1em
+	padding 1.5em 1.5em 1.5em 3em
 
 .node
 	left 1.5em
-	marign-left 1em
 	position relative
+	width calc(100% - 1.5em)
 
 	&_object
-		left 3em
 		text-indent -1.5em
 
 	&__key
@@ -73,6 +72,7 @@ body
 			color COLOR_VALUE_TYPED
 
 	&__decorator
+	&__quote
 	&__delimiter
 	&__separator
 		color COLOR_PUNCTUATION
@@ -88,9 +88,9 @@ body
 
 .toggle
 	cursor pointer
-	left -1.2em
+	left -3em
 	position absolute
-	top .2em
+	top .9em
 	z-index 1
 
 	&:before
@@ -104,6 +104,7 @@ body
 		font-variant normal
 		margin 0
 		padding 0
+		position absolute
 		text-align center
 		text-transform none
 		line-height 1em
@@ -115,11 +116,16 @@ body
 
 .closed
 	& .node
+	& .text
 		display none
 	& .node__decorator:after
 		content '...'
 
+.node__value.closed:before
+	content '"..."'
+
 .closed > .toggle
+	left -2.25em
 	top .1em
 
 	&:before

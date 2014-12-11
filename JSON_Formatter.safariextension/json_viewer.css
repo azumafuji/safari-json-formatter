@@ -4,7 +4,7 @@ body {
   line-height: 1.3em;
   margin: 0;
   padding: 0;
-  color: #222;
+  color: #3f3f3f;
 }
 body.before .source {
   display: block;
@@ -39,15 +39,14 @@ body.before .json {
   box-shadow: inset 0 1px 1px 0 #64bef1;
 }
 .json {
-  padding: 1em;
+  padding: 1.5em 1.5em 1.5em 3em;
 }
 .node {
   left: 1.5em;
-  marign-left: 1em;
   position: relative;
+  width: calc(100% - 1.5em);
 }
 .node_object {
-  left: 3em;
   text-indent: -1.5em;
 }
 .node__key {
@@ -61,6 +60,7 @@ body.before .json {
   color: #339;
 }
 .node__decorator,
+.node__quote,
 .node__delimiter,
 .node__separator {
   color: #7f7f7f;
@@ -76,9 +76,9 @@ body.before .json {
 }
 .toggle {
   cursor: pointer;
-  left: -1.2em;
+  left: -3em;
   position: absolute;
-  top: 0.2em;
+  top: 0.9em;
   z-index: 1;
 }
 .toggle:before {
@@ -92,6 +92,7 @@ body.before .json {
   font-variant: normal;
   margin: 0;
   padding: 0;
+  position: absolute;
   text-align: center;
   text-transform: none;
   line-height: 1em;
@@ -101,13 +102,18 @@ body.before .json {
 .toggle:hover:before {
   color: #3f3f3f;
 }
-.closed .node {
+.closed .node,
+.closed .text {
   display: none;
 }
 .closed .node__decorator:after {
   content: '...';
 }
+.node__value.closed:before {
+  content: '"..."';
+}
 .closed > .toggle {
+  left: -2.25em;
   top: 0.1em;
 }
 .closed > .toggle:before {

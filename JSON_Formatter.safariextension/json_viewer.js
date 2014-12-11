@@ -14,9 +14,10 @@
 	var templates = {
 		node: '<div class="node" />',
 		key: '<span class="node__key" />',
-		string: '<span class="node__value" />',
+		text: '<span class="node__value" />',
+		textContent: '<span class="text" />',
 		literal: '<span class="node__value node__value_literal" />',
-		quote: '<span class="node__decorator">"</span>',
+		quote: '<span class="node__quote">"</span>',
 		colon: '<span class="node__delimiter">:</span>',
 		comma: '<span class="node__separator">,</span>',
 		bracket: '<span class="node__decorator" />',
@@ -80,7 +81,7 @@
 		var elemsCache = {};
 		var counter = 1;
 		var counterAttr = 'data-children-list-id';
-		var childrenSel = '.icon_disclosure';
+		var childrenSel = '.toggle';
 		var fGetParent = function (element) {
 			return element.parentElement;
 		};
@@ -99,6 +100,68 @@
 				counter++;
 			}
 			return elemsCollection;
+		};
+	})();
+
+	/**
+	 * render a javascript variable as HTML
+	 * render( foo ) => Element
+	 * @param {*} value
+	 * @param {string} [key]
+	 * @returns {HTMLElement}
+	 */
+	var render = (function () {
+
+		/**
+		 * @param {Array} nodeElems
+		 * @param {Array} brackets
+		 * @returns {Array}
+		 */
+		var buildNode = function (nodeElems, brackets) {
+			var result = [].concat(
+				append(html(templates.bracket), text(brackets[0])),
+				nodeElems,
+				text(brackets[1])
+			);
+			// adding toogle button if an object isn't empty
+			if (nodeElems.length) {
+				result.push(html(templates.toggle));
+			}
+			return result;
+		};
+
+		return function (value, key) {
+			var valueType = getTypeOf(value);
+			var node = html(templates.node);
+			var objectClassName = cssClasses.objectNode;
+			var renderedValue, renderedKey;
+
+			if (valueType === 'array') {
+				node.classList.add(cssClasses.collapsible);
+				renderedValue = buildNode(renderArray(value), ['[', ']']);
+
+			} else if (valueType === 'object') {
+				node.classList.add(objectClassName);
+				node.classList.add(cssClasses.collapsible);
+				renderedValue = buildNode(renderObject(value), ['{', '}']);
+
+			} else if (valueType === 'string') {
+				renderedValue = renderString(value);
+			} else {
+				renderedValue = renderLiteral(value);
+			}
+
+			if (typeof key !== 'undefined') {
+				renderedKey = [
+					html(templates.quote),
+					text(key),
+					html(templates.quote),
+					html(templates.colon)
+				];
+				renderedKey = append(html(templates.key), renderedKey);
+				append(node, renderedKey);
+			}
+			return append(node, renderedValue);
 		};
 	})();
 	
@@ -259,7 +322,7 @@
 		var elBody = bodyElement;
 		var sourceText = elBody.textContent;
 		var sourceCont = html('<section />');
-		var jsonCont = sourceCont.cloneNode();
+		var jsonCont = sourceCont.cloneNode(false);
 
 		sourceCont.innerText = sourceText;
 		sourceCont.classList.add('source');
@@ -290,7 +353,6 @@
 			}
 			aResult.unshift(currentNode);
 		}
-		aResult.push(html(templates.toggle));
 		return aResult;
 	}
 
@@ -319,7 +381,6 @@
 			}
 			aResult.unshift(currentNode);
 		}
-		aResult.push(html(templates.toggle));
 		return aResult;
 	}
 
@@ -329,8 +390,8 @@
 	 * @returns {HTMLElement}
 	 */
 	function renderString (stringToRender) {
-		var stringCont = html(templates.string);
-		var stringElems = [text('"' + stringToRender + '"')];
+		var stringCont = html(templates.text);
+		var stringElems = [append(html(templates.textContent), text('"' + stringToRender + '"'))];
 		var collapsible = stringToRender.length > parseInt( settings.long_string_length, 10 );
 		var collapsed = collapsible && settings.fold_strings;
 
@@ -354,54 +415,4 @@
 		return append(html(templates.literal), text(valueToRender));
 	}
 
-	/**
-	 * render a javascript variable as HTML
-	 * render( foo ) => Element
-	 * @param {*} value
-	 * @param {string} [key]
-	 * @returns {HTMLElement}
-	 */
-	function render (value, key) {
-		var valueType = getTypeOf(value);
-		var node = html(templates.node);
-		var bracketTemplate = templates.bracket;
-		var objectClassName = cssClasses.objectNode;
-		var renderedValue, renderedKey;
-
-		if (valueType === 'array') {
-			node.classList.add(cssClasses.collapsible);
-			renderedValue = [].concat(
-				append(html(bracketTemplate), text('[')),
-				renderArray(value),
-				append(html(bracketTemplate), text(']'))
-			);
-
-		} else if (valueType === 'object') {
-			node.classList.add(objectClassName);
-			node.classList.add(cssClasses.collapsible);
-			renderedValue = [].concat(
-				append(html(bracketTemplate), text('{')),
-				renderObject(value),
-				append(html(bracketTemplate), text('}'))
-			);
-
-		} else if (valueType === 'string') {
-			renderedValue = renderString(value);
-		} else {
-			renderedValue = renderLiteral(value);
-		}
-
-		if (typeof key !== 'undefined') {
-			renderedKey = [
-				html(templates.quote),
-				text(key),
-				html(templates.quote),
-				html(templates.colon)
-			];
-			renderedKey = append(html(templates.key), renderedKey);
-			append(node, renderedKey);
-		}
-		return append(node, renderedValue);
-	}
-	
 }(window));

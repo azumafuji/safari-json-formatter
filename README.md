@@ -10,11 +10,18 @@ This is a fork of Safari extension by [rfletcher][1] which makes valid JSON docu
 ## Installation
 [Download the extension][2] and open it with Safari 5 or higher.
 
-### Usage
+## Usage
 Once installed, load any valid JSON document. [This project's most recent
 commit][3] makes a good example.
 
-#### Version History
+* Click to disclosure triangles to toggle nodes.
+* Click to disclosure triangles with Cmd key to toggle nested nodes.
+
+## Version History
+
+### 1.2.1
+* Small fixies
+* Changed "hide/show all" logic
 
 ### 1.2
 * Code refactoring
@@ -28,7 +35,7 @@ commit][3] makes a good example.
 * Added a "toggle formatting" button to switch between formatted and original JSON
 * Bug Fixes
 
-#### Caveats
+## Caveats
 The extension aims to produce the same JSON string that's been loaded as input,
 but because the original JSON has actually been parsed, some transformation may
 occur. In other words, the formatted JSON will always be equivalent to the

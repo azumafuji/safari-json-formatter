@@ -1,0 +1,137 @@
+// settings
+COLOR_BASE = #3f3f3f
+COLOR_VALUE_TYPED = #339
+COLOR_VALUE_STRING = #393
+COLOR_PUNCTUATION = #7f7f7f
+COLOR_ICON = #aaa
+COLOR_ICON_HOVER = #3f3f3f
+
+// reset
+body
+	font-family 'Courier new', monospace
+	font-size 14px
+	line-height 1.3em
+	margin 0
+	padding 0
+	color COLOR_BASE
+
+	&.before .source
+		display block
+
+	&.before .json
+		display none
+
+.source
+	display none
+
+// toggle button
+.toolbar
+	font-family "Myriad Set Pro", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif
+	font-size .8em
+	position absolute
+	top 2.3em
+	right 1em
+	-webkit-user-select none
+	z-index 10
+
+	&__item
+		background-image linear-gradient(to bottom, #37aaea 0, #117ed2 100%)
+		color #FFF
+		box-shadow inset 0 1px 1px 0 #6fc5f5
+		padding .5em 1.5em
+		border-radius 4px
+		line-height 1.5em
+		cursor pointer
+		-webkit-font-smoothing: subpixel-antialiased
+
+			&:hover
+				background-image linear-gradient(to bottom, #2488d4 0, #1c5bad 100%)
+				box-shadow inset 0 1px 1px 0 #64bef1
+
+
+// formatted json
+.json
+	padding 1.5em
+
+.node
+	left 1.5em
+	position relative
+	width calc(100% - 1.5em)
+
+	&_object &_string
+		left 3em
+		text-indent: -1.5em
+		width: calc(100% - 3em);
+
+	&__key
+		font-weight bold
+
+	&__value
+		color COLOR_VALUE_STRING
+		word-break break-all
+
+		&_literal
+			color COLOR_VALUE_TYPED
+
+	&__decorator
+	&__quote
+	&__delimiter
+	&__separator
+		color COLOR_PUNCTUATION
+	&__delimiter
+		margin-right .25em
+
+
+@font-face
+	font-family 'fontello'
+	src url('___extensionBaseUrl___fontello.ttf') format('truetype')
+	font-weight normal
+	font-style normal
+
+.toggle
+	cursor pointer
+	left -1.25em
+	position absolute
+	top .2em
+	z-index 1
+
+	&.toggle_string
+		left -3em
+		top .9em
+
+	&:before
+		color COLOR_ICON
+		content '\e800'
+		display inline-block
+		font-size 1em
+		font-family "fontello"
+		font-style normal
+		font-weight normal
+		font-variant normal
+		margin 0
+		padding 0
+		position absolute
+		text-align center
+		text-transform none
+		line-height 1em
+		-webkit-transform rotate(90deg)
+		width 1em
+
+	&:hover:before
+		color COLOR_ICON_HOVER
+
+.closed
+	& .node
+	& .text
+		display none
+	& .node__decorator:after
+		content '...'
+	& > .toggle
+		top .1em
+		&:before
+			-webkit-transform rotate(0deg)
+	& > .toggle_string
+		left -2.1em
+
+.node__value.closed:before
+	content '"..."'

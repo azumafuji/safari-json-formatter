@@ -1,6 +1,6 @@
 # JSON Formatter
 
-A Safari extension which makes valid JSON documents human-readable.
+This is a fork of Safari extension by [rfletcher][1] which makes valid JSON documents human-readable.
 
 ### Before:
 ![Before][i1]
@@ -8,13 +8,18 @@ A Safari extension which makes valid JSON documents human-readable.
 ![After][i2]
 
 ## Installation
-[Download the extension][1] and open it with Safari 5.
+[Download the extension][2] and open it with Safari 5 or higher.
 
 ### Usage
 Once installed, load any valid JSON document. [This project's most recent
-commit][2] makes a good example.
+commit][3] makes a good example.
 
 #### Version History
+
+### 1.2
+* Code refactoring
+* Performance improvements
+* Added "hide/show all" ability
 
 ### 1.1
 * Added folding of arrays, objects and long strings
@@ -32,7 +37,8 @@ known example of this is kind of discrepancy is between number formats -- if the
 original JSON contains the numeric value 1e2, for example, the formatted JSON
 will display the value 100.
 
-[1]: http://github.com/rfletcher/safari-json-formatter/downloads
-[2]: http://github.com/rfletcher/safari-json-formatter/commit/HEAD.json
-[i1]: https://github.com/rfletcher/safari-json-formatter/raw/HEAD/etc/images/before.png
-[i2]: https://github.com/rfletcher/safari-json-formatter/raw/HEAD/etc/images/after.png
+[1]: https://github.com/rfletcher/safari-json-formatter/
+[2]: http://github.com/drfisher/safari-json-formatter/downloads
+[3]: http://github.com/drfisher/safari-json-formatter/commit/HEAD.json
+[i1]: https://github.com/drfisher/safari-json-formatter/raw/HEAD/etc/images/before.png
+[i2]: https://github.com/drfisher/safari-json-formatter/raw/HEAD/etc/images/after.png

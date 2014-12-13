@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="json_viewer.css">
+	<title>New markup samples</title>
+</head>
+<body>
+
+<!-- toolbar -->
+<div class="toolbar">
+	<div class="toolbar__item">Toggle Formatting</div>
+</div>
+
+<section class="json">
+	<div class="node">
+		<span class="node__decorator">{</span>
+
+		<!-- simple values -->
+		<div class="node">
+			<span class="node__key"><span class="node__decorator">"</span>LastName<span class="node__decorator">"</span><span class="node__delimiter">:</span></span>
+			<span class="node__value">"Фернандинью"<span class="node__separator">,</span></span>
+		</div>
+		<div class="node">
+			<span class="node__key"><span class="node__decorator">"</span>role<span class="node__decorator">"</span><span class="node__delimiter">:</span></span>
+			<span class="node__value">"полузащитник"<span class="node__separator">,</span></span>
+		</div>
+
+		<!-- array -->
+		<div class="node">
+			<span class="node__key"><span class="node__decorator">"</span>array<span class="node__decorator">"</span><span class="node__delimiter">:</span></span>
+			<span class="node__decorator">[</span>
+			<div class="node"><span class="node__value">1</span><span class="node__separator">,</span></div>
+			<div class="node"><span class="node__value">2</span><span class="node__separator">,</span></div>
+			<div class="node"><span class="node__value">3</span><span class="node__separator">,</span></div>
+			<div class="node"><span class="node__value">4</span><span class="node__separator">,</span></div>
+			<div class="node"><span class="node__value">5</span><span class="node__separator">,</span></div>
+			<span class="icon"></span>
+			<span class="node__decorator">]</span><span class="node__separator">,</span>
+		</div>
+
+		<span class="node__decorator">}</span>
+	</div>
+</section>
+
+	<!--
+	"player" : [
+	{
+	"FirstName" : "",
+	"number" : "5",
+	"LastName" : "Фернандинью",
+	"ShortFirstName" : "",
+	"id" : "11830",
+	"role" : "полузащитник"
+	},
+	{
+	"FirstName" : "",
+	"number" : "17",
+	"LastName" : "Луиз Густаву",
+	"ShortFirstName" : "",
+	"id" : "22052",
+	"role" : "полузащитник"
+	}
+	]
+	-->
+
+</body>
+</html>

@@ -51,15 +51,17 @@ body
 
 // formatted json
 .json
-	padding 1.5em 1.5em 1.5em 3em
+	padding 1.5em
 
 .node
 	left 1.5em
 	position relative
 	width calc(100% - 1.5em)
 
-	&_object
-		text-indent -1.5em
+	&_object &_string
+		left 3em
+		text-indent: -1.5em
+		width: calc(100% - 3em);
 
 	&__key
 		font-weight bold
@@ -88,10 +90,14 @@ body
 
 .toggle
 	cursor pointer
-	left -3em
+	left -1.25em
 	position absolute
-	top .9em
+	top .2em
 	z-index 1
+
+	&.toggle_string
+		left -3em
+		top .9em
 
 	&:before
 		color COLOR_ICON
@@ -120,13 +126,12 @@ body
 		display none
 	& .node__decorator:after
 		content '...'
+	& > .toggle
+		top .1em
+		&:before
+			-webkit-transform rotate(0deg)
+	& > .toggle_string
+		left -2.1em
 
 .node__value.closed:before
 	content '"..."'
-
-.closed > .toggle
-	left -2.25em
-	top .1em
-
-	&:before
-		-webkit-transform rotate(0deg)

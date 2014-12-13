@@ -26,7 +26,9 @@
 	var cssClasses = {
 		closed: 'closed',
 		collapsible: 'collapsible',
-		objectNode: 'node_object'
+		objectNode: 'node_object',
+		stringNode: 'node_string',
+		toggleString: 'toggle_string'
 	};
 	
 	/**
@@ -134,6 +136,7 @@
 			var valueType = getTypeOf(value);
 			var node = html(templates.node);
 			var objectClassName = cssClasses.objectNode;
+			var stringClassName = cssClasses.stringNode;
 			var renderedValue, renderedKey;
 
 			if (valueType === 'array') {
@@ -146,6 +149,7 @@
 				renderedValue = buildNode(renderObject(value), ['{', '}']);
 
 			} else if (valueType === 'string') {
+				node.classList.add(stringClassName);
 				renderedValue = renderString(value);
 			} else {
 				renderedValue = renderLiteral(value);
@@ -394,10 +398,13 @@
 		var stringElems = [append(html(templates.textContent), text('"' + stringToRender + '"'))];
 		var collapsible = stringToRender.length > parseInt( settings.long_string_length, 10 );
 		var collapsed = collapsible && settings.fold_strings;
+		var toggleElem;
 
 		if (collapsible) {
-			stringElems.push(html(templates.toggle));
+			toggleElem = html(templates.toggle);
+			toggleElem.classList.add(cssClasses.toggleString);
 			stringCont.classList.add(cssClasses.collapsible);
+			stringElems.push(toggleElem);
 		}
 		if (collapsed) {
 			stringCont.classList.add(cssClasses.closed);

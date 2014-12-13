@@ -39,15 +39,17 @@ body.before .json {
   box-shadow: inset 0 1px 1px 0 #64bef1;
 }
 .json {
-  padding: 1.5em 1.5em 1.5em 3em;
+  padding: 1.5em;
 }
 .node {
   left: 1.5em;
   position: relative;
   width: calc(100% - 1.5em);
 }
-.node_object {
+.node_object .node_string {
+  left: 3em;
   text-indent: -1.5em;
+  width: calc(100% - 3em);
 }
 .node__key {
   font-weight: bold;
@@ -76,10 +78,14 @@ body.before .json {
 }
 .toggle {
   cursor: pointer;
-  left: -3em;
+  left: -1.25em;
   position: absolute;
-  top: 0.9em;
+  top: 0.2em;
   z-index: 1;
+}
+.toggle.toggle_string {
+  left: -3em;
+  top: 0.9em;
 }
 .toggle:before {
   color: #aaa;
@@ -109,13 +115,15 @@ body.before .json {
 .closed .node__decorator:after {
   content: '...';
 }
-.node__value.closed:before {
-  content: '"..."';
-}
 .closed > .toggle {
-  left: -2.25em;
   top: 0.1em;
 }
 .closed > .toggle:before {
   -webkit-transform: rotate(0deg);
+}
+.closed > .toggle_string {
+  left: -2.1em;
+}
+.node__value.closed:before {
+  content: '"..."';
 }

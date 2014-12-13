@@ -78,17 +78,16 @@
 
 	/**
 	 * Getting elems collection to toggle
+	 * @param {HTMLElement} buttonElem
 	 */
 	var getElemsToToggle = (function () {
 		var elemsCache = {};
 		var counter = 1;
 		var counterAttr = 'data-children-list-id';
 		var childrenSel = '.toggle';
-		var fGetParent = function (element) {
-			return element.parentElement;
-		};
 
-		return function (parentElem) {
+		return function (buttonElem) {
+			var parentElem = buttonElem.parentElement;
 			var cacheKey = parentElem.getAttribute(counterAttr);
 			var elemsCollection;
 
@@ -96,7 +95,13 @@
 				elemsCollection = elemsCache[cacheKey];
 
 			} else {
-				elemsCollection = Array.prototype.slice.call(parentElem.querySelectorAll(childrenSel), 0).map(fGetParent);
+				elemsCollection = [];
+				Array.prototype.slice.call(parentElem.querySelectorAll(childrenSel), 0)
+					.forEach(function (element) {
+						if (element !== buttonElem) {
+							elemsCollection.push(element.parentElement);
+						}
+					});
 				parentElem.setAttribute(counterAttr, counter);
 				elemsCache[counter] = elemsCollection;
 				counter++;
@@ -303,14 +308,35 @@
 
 		// disclosure triangles
 		handleEvent('click', 'toggle', function (oEvent) {
-			var elParent = oEvent.target.parentElement;
+			var elButton = oEvent.target;
+			var elParent = elButton.parentElement;
 			var closedClass = cssClasses.closed;
+			var classMethodName, elemsToToggle;
 
 			if (oEvent.metaKey) {
-				var classMethodName = elParent.classList.contains(closedClass) ? 'remove' : 'add';
-				getElemsToToggle(elParent).forEach(function (elemToToggle) {
-					elemToToggle.classList[classMethodName](closedClass);
-				});
+				classMethodName = 'remove';
+				elemsToToggle = getElemsToToggle(elButton);
+
+				// has no nested collabsible nodes
+				if (!elemsToToggle.length) {
+					elParent.classList.toggle(closedClass);
+
+				// has nested nodes
+				} else {
+					elemsToToggle.some(function (currentElem) {
+						if (!currentElem.classList.contains(closedClass)) {
+							classMethodName = 'add';
+							return true;
+						}
+					});
+					elemsToToggle.forEach(function (currentElem) {
+						currentElem.classList[classMethodName](closedClass);
+					});
+					// open parent if it's closed
+					if (elParent.classList.contains(closedClass)) {
+						elParent.classList.remove(closedClass);
+					}
+				}
 
 			} else {
 				elParent.classList.toggle(closedClass);

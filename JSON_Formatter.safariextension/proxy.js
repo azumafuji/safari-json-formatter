@@ -6,6 +6,13 @@
 	var extensionSettings = safariNameSpace.extension.settings;
 	var baseURI = safariNameSpace.extension.baseURI;
 	var xmlHttp = new XMLHttpRequest();
+	var optNames = [
+		'fold_strings',
+		'long_string_length',
+		'unescape_unicode',
+		'sort_keys',
+		'font_css'
+	];
 	var toolbarHTML, stylesText;
 
 	// Load css syncronically
@@ -21,13 +28,22 @@
 			messageEvent.target.page.dispatchMessage('setData', {
 				css: stylesText,
 				toolbar: toolbarHTML,
-				settings: {
-					fold_strings: extensionSettings.getItem('fold_strings'),
-					long_string_length: extensionSettings.getItem('long_string_length'),
-					unescape_unicode: extensionSettings.getItem('unescape_unicode'),
-					sort_keys: extensionSettings.getItem('sort_keys')
-				}
+				settings: getActualSettings()
 			});
 		}
 	}, false);
+
+	/**
+	 * Returns actual settings
+	 * @returns {object}
+	 */
+	function getActualSettings () {
+		var settings = {};
+		var curName;
+		for (var i = 0, len = optNames.length; i < len; i++) {
+			curName = optNames[i];
+			settings[curName] = extensionSettings.getItem(curName);
+		}
+		return settings;
+	}
 })(window);

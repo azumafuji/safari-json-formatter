@@ -20,6 +20,7 @@ commit][3] makes a good example.
 ## Version History
 
 ### 1.2.1
+* Added font options
 * Small fixies
 * Changed "hide/show all" logic
 
@@ -45,7 +46,7 @@ original JSON contains the numeric value 1e2, for example, the formatted JSON
 will display the value 100.
 
 [1]: https://github.com/rfletcher/safari-json-formatter/
-[2]: https://cloud.mail.ru/public/b16ded11d241/JSON_Formatter.safariextz
+[2]: https://cloud.mail.ru/public/fc55b7dfd05b/JSON_Formatter_1.2.1.safariextz
 [3]: http://github.com/drfisher/safari-json-formatter/commit/HEAD.json
 [i1]: https://github.com/drfisher/safari-json-formatter/raw/HEAD/etc/images/before.png
 [i2]: https://github.com/drfisher/safari-json-formatter/raw/HEAD/etc/images/after.png

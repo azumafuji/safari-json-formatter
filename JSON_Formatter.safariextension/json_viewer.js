@@ -285,6 +285,7 @@
 		var style = doc.createElement('style');
 		style.innerHTML = css;
 		bodyElement.appendChild(style);
+		bodyElement.style.font = settings.font_css;
 	}
 
 	/**

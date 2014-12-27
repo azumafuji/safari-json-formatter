@@ -17,7 +17,13 @@ commit][3] makes a good example.
 * Click to disclosure triangles to toggle nodes.
 * Click to disclosure triangles with Cmd key to toggle nested nodes.
 
+## Extension settings
+![Extension settings][i3]
+
 ## Version History
+
+### 1.2.2
+* Added window opening after click with Cmd key on any url
 
 ### 1.2.1
 * Added font options
@@ -46,7 +52,8 @@ original JSON contains the numeric value 1e2, for example, the formatted JSON
 will display the value 100.
 
 [1]: https://github.com/rfletcher/safari-json-formatter/
-[2]: https://cloud.mail.ru/public/fc55b7dfd05b/JSON_Formatter_1.2.1.safariextz
+[2]: https://cloud.mail.ru/public/d07850f7b26e/JSON_Formatter_1.2.2.safariextz
 [3]: http://github.com/drfisher/safari-json-formatter/commit/HEAD.json
 [i1]: https://github.com/drfisher/safari-json-formatter/raw/HEAD/etc/images/before.png
 [i2]: https://github.com/drfisher/safari-json-formatter/raw/HEAD/etc/images/after.png
+[i3]: https://github.com/drfisher/safari-json-formatter/raw/HEAD/etc/images/settings.png

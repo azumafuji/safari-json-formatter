@@ -343,6 +343,40 @@
 				elParent.classList.toggle(closedClass);
 			}
 		});
+
+		// click on links with pressed Cmd key
+		handleEvent('click', 'text', function (oEvent) {
+			if (oEvent.metaKey) {
+				var textElem = oEvent.target;
+				var sCachedUrl = textElem.cachedUrl;
+				var textContent, urlToOpen;
+
+				if (sCachedUrl) {
+					if (sCachedUrl !== 'none') {
+						urlToOpen = sCachedUrl;
+					}
+				} else {
+					textContent = trimString(textElem.textContent);
+					if (/^(:?https?)\:\/\/(:?\.?[-;:&=\+\$,\w]+\/?)+/.test(textContent)) {
+						textElem.cachedUrl = urlToOpen = textContent;
+					} else {
+						textElem.cachedUrl = 'none';
+					}
+				}
+				if (urlToOpen) {
+					window.open(urlToOpen);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Removing spaces and quotes from string
+	 * @param {string} sourceString
+	 * @returns {string}
+	 */
+	function trimString (sourceString) {
+		return sourceString.trim().replace(/^["']?([^'"]*)["']?$/, '$1');
 	}
 
 	/**
